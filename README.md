@@ -69,8 +69,8 @@ A comprehensive web-based tool for visualizing how Large Language Models (LLMs) 
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/yourusername/LLMVisualizer.git
-cd LLMVisualizer
+git clone https://github.com/Shwethaamrutha/TSAI-S2.git
+cd TSAI-S2
 ```
 
 ### 2. Set Up Virtual Environment
