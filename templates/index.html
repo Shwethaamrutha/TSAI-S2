@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LLM Visualizer</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
@@ -46,20 +46,60 @@
                 <ul id="token-list"></ul>
             </div>
         </div>
-
+        <div class="tokenization-process-panel">
+            <h2>Tokenization and Embedding Process</h2>
+            <div class="process-steps">
+                <div class="step-controls">
+                    <button id="prev-step" disabled>Previous</button>
+                    <button id="next-step">Next</button>
+                </div>
+                <div class="step-indicator">
+                    Step <span id="current-step">1</span> of <span id="total-steps">4</span>
+                </div>
+            </div>
+            <div class="process-visualization">
+                <div class="step-content" id="step-1">
+                    <h3>Step 1: Input Text</h3>
+                    <div class="text-breakdown"></div>
+                </div>
+                <div class="step-content" id="step-2" style="display: none;">
+                    <h3>Step 2: Tokenization</h3>
+                    <div class="token-breakdown"></div>
+                </div>
+                <div class="step-content" id="step-3" style="display: none;">
+                    <h3>Step 3: Token IDs</h3>
+                    <div class="token-ids-breakdown"></div>
+                </div>
+                <div class="step-content" id="step-4" style="display: none;">
+                    <h3>Step 4: Vector Embeddings</h3>
+                    <div class="embedding-breakdown"></div>
+                </div>
+            </div>
+        </div>
+        
         <div class="visualization-section">
             <div class="viz-container">
                 <h2>3D Embedding Visualization</h2>
-                <div id="embedding-plot"></div>
-                <div class="viz-legend">
-                    <p>• Points represent tokens in 3D space</p>
-                    <p>• Similar words appear closer together</p>
-                    <p>• Colors indicate position in sentence</p>
-                    <p>• Drag to rotate, scroll to zoom</p>
+                <div class="viz-controls">
+                    <div class="color-scale-selector"></div>
                 </div>
-            </div>
+                <div id="embedding-plot"></div>
+                <div class="viz-instructions">
+                    <ul>
+                        <li><span class="bullet">•</span> Points represent tokens in 3D space</li>
+                        <li><span class="bullet">•</span> Similar words appear closer together</li>
+                        <li><span class="bullet">•</span> Colors indicate position in sequence</li>
+                        <li><span class="bullet">•</span> Use mouse wheel to zoom, drag to rotate</li>
+                    </ul>
+                </div>
+                <div class="plot-bottom-space"></div>
+            </div>            
 
-            <div class="viz-container">
+
+            
+            
+        
+            <div class="viz-container attention-container">
                 <h2>Attention Visualization</h2>
                 <div id="attention-heatmap"></div>
                 <div class="viz-legend">
@@ -70,6 +110,8 @@
                 </div>
             </div>
         </div>
+
+            
     </div>
 
     <script src="{{ url_for('static', filename='js/visualization.js') }}"></script>
