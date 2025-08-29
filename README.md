@@ -73,34 +73,46 @@ git clone https://github.com/Shwethaamrutha/TSAI-S2.git
 cd TSAI-S2
 ```
 
-### 2. Set Up Virtual Environment
+### 2. Install uv (Package Manager)
 ```bash
-# Create virtual environment
-python -m venv .venv
+# Install uv globally (recommended for EC2)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+# Add uv to PATH (uv is installed to ~/.local/bin)
+export PATH="$HOME/.local/bin:$PATH"
 
-# Activate virtual environment
-# On macOS/Linux:
-source .venv/bin/activate
-# On Windows:
-.venv\Scripts\activate
+# Or install uv using pip (alternative)
+pip install uv
 ```
 
 ### 3. Install Dependencies
 ```bash
-# Install uv if not already installed
-pip install uv
-
-# Install project dependencies
+# Install project dependencies using uv (creates virtual environment automatically)
 uv sync
+
+# Or if you prefer to use pip with manual virtual environment:
+# python -m venv .venv
+# source .venv/bin/activate
+# pip install -r requirements.txt
+```
+
+# Alternative: If you encounter build issues, use pip directly
+pip install flask transformers torch numpy scikit-learn matplotlib plotly
+
+# Or use requirements.txt
+pip install -r requirements.txt
+
+# For environments with limited disk space (like EC2), use CPU-only PyTorch:
+pip install -r requirements-cpu.txt
 ```
 
 ### 4. Run the Application
 ```bash
-# Start the Flask development server
+# Start the Flask development server (Recommended)
 uv run python app.py
 
-# Or alternatively, you can use:
-python app.py
+# Or alternatively, if using manual virtual environment:
+# source .venv/bin/activate
+# python app.py
 ```
 
 The application will be available at `http://localhost:5000`
@@ -196,12 +208,17 @@ The 3D plot shows how the model represents tokens in semantic space:
 - **Proximity**: Similar tokens appear closer together
 - **Color Coding**: Position in sequence (purple = beginning, yellow = end)
 - **Contextual Embeddings**: Same word can have different positions based on context
+- **Interactive Controls**: Toggle text labels, download embeddings (CSV/JSON)
+- **Enhanced Visualization**: Improved marker size, opacity, and hover information
 
 ### Attention Matrix Analysis
 The attention heatmap reveals how the model "pays attention" to different tokens:
 - **Self-Attention**: Diagonal elements show tokens attending to themselves
 - **Cross-Attention**: Off-diagonal elements show relationships between tokens
 - **Function Words**: Words like "and", "with", "while" act as attention hubs
+- **Layer Selection**: Choose which attention layer to visualize
+- **Enhanced Color Scale**: 6-color gradient for better pattern visualization
+- **Numerical Annotations**: Toggle to show/hide exact attention values
 
 ### Tokenization Process
 Step-by-step breakdown of how text is processed:
@@ -230,6 +247,9 @@ uv run python app.py
 
 # Or using Python directly
 python app.py
+
+# The application runs on port 5000 by default
+# Access at: http://localhost:5000
 ```
 
 ### Production Deployment
@@ -257,6 +277,110 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Plotly** for the interactive visualization library
 - **scikit-learn** for dimensionality reduction algorithms
 - **Flask** for the web framework
+
+## 🔧 Troubleshooting
+
+### Disk Space Issues (Common on EC2)
+If you encounter "No space left on device" errors:
+
+```bash
+# Check available disk space
+df -h
+
+# Clear cache directories
+rm -rf ~/.cache/uv/
+pip cache purge
+
+# Use CPU-only PyTorch (much smaller)
+pip install -r requirements-cpu.txt
+```
+
+### Build Issues
+If `uv sync` fails, try:
+```bash
+# Use pip directly
+pip install -r requirements.txt
+
+# Or install dependencies individually
+pip install flask transformers torch numpy scikit-learn matplotlib plotly
+```
+
+### Permission Issues
+If you get "Permission denied" errors when running the app:
+```bash
+# Try running on a different port:
+python -c "from app import app; app.run(debug=True, host='0.0.0.0', port=8080)"
+```
+
+### EC2 Deployment Issues
+For EC2 Linux instances with limited disk space:
+
+#### Method 1: Using uv (Recommended)
+```bash
+# 1. Check disk space
+df -h
+
+# 2. If using attached EBS volume, move project to new volume
+cd /mnt/data
+git clone <your-repo>
+cd LLMVisualizer
+
+# 3. Install uv if not already installed
+curl -LsSf https://astral.sh/uv/install.sh | sh
+# Add uv to PATH (uv is installed to ~/.local/bin)
+export PATH="$HOME/.local/bin:$PATH"
+
+# 4. Set Hugging Face cache to new volume
+export HF_HOME=/mnt/data/huggingface_cache
+export TRANSFORMERS_CACHE=/mnt/data/huggingface_cache
+export HF_DATASETS_CACHE=/mnt/data/huggingface_cache
+
+# 5. Make environment variables permanent for all users
+sudo tee /etc/profile.d/huggingface.sh << EOF
+export HF_HOME=/mnt/data/huggingface_cache
+export TRANSFORMERS_CACHE=/mnt/data/huggingface_cache
+export HF_DATASETS_CACHE=/mnt/data/huggingface_cache
+EOF
+
+# 6. Install dependencies using uv
+uv sync
+
+# 7. Run the application
+uv run python app.py
+```
+
+#### Method 2: Using pip (Alternative)
+```bash
+# 1. Check disk space
+df -h
+
+# 2. If using attached EBS volume, move project to new volume
+cd /mnt/data
+git clone <your-repo>
+cd LLMVisualizer
+
+# 3. Create virtual environment on new volume
+python3 -m venv venv
+source venv/bin/activate
+
+# 4. Install CPU-only PyTorch (much smaller)
+pip install -r requirements-cpu.txt
+
+# 5. Set Hugging Face cache to new volume
+export HF_HOME=/mnt/data/huggingface_cache
+export TRANSFORMERS_CACHE=/mnt/data/huggingface_cache
+export HF_DATASETS_CACHE=/mnt/data/huggingface_cache
+
+# 6. Make environment variables permanent for all users
+sudo tee /etc/profile.d/huggingface.sh << EOF
+export HF_HOME=/mnt/data/huggingface_cache
+export TRANSFORMERS_CACHE=/mnt/data/huggingface_cache
+export HF_DATASETS_CACHE=/mnt/data/huggingface_cache
+EOF
+
+# 7. Run the application
+python app.py
+```
 
 ## 📞 Support
 
