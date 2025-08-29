@@ -96,6 +96,7 @@ uv sync
 ```
 
 # Alternative: If you encounter build issues, use pip directly
+```bash
 pip install flask transformers torch numpy scikit-learn matplotlib plotly
 
 # Or use requirements.txt
