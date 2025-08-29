@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LLM Visualizer</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
@@ -82,8 +82,23 @@
                 <h2>3D Embedding Visualization</h2>
                 <div class="viz-controls">
                     <div class="color-scale-selector"></div>
+                    <div class="text-labels-control" style="margin-top: 10px;">
+                        <label>
+                            <input type="checkbox" id="show-text-labels" checked>
+                            Show Token Labels
+                        </label>
+                    </div>
+                    <div class="download-controls" style="margin-top: 10px;">
+                        <button id="download-embeddings" class="download-btn">Download Embeddings (CSV)</button>
+                        <button id="download-embeddings-json" class="download-btn">Download Embeddings (JSON)</button>
+                    </div>
                 </div>
-                <div id="embedding-plot"></div>
+                <div id="embedding-plot">
+                    <div style="text-align: center; padding: 50px; color: #666;">
+                        <p>3D visualization will appear here after processing text</p>
+                        <p style="font-size: 0.9em;">Enter text above and click "Process" to see the 3D embedding visualization</p>
+                    </div>
+                </div>
                 <div class="viz-instructions">
                     <ul>
                         <li><span class="bullet">•</span> Points represent tokens in 3D space</li>
@@ -101,12 +116,31 @@
         
             <div class="viz-container attention-container">
                 <h2>Attention Visualization</h2>
+                <div class="attention-controls" style="margin-bottom: 15px;">
+                    <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+                        <div>
+                            <label for="attention-layer">Attention Layer: </label>
+                            <select id="attention-layer">
+                                <option value="last">Last Layer (Recommended)</option>
+                                <option value="first">First Layer</option>
+                                <option value="middle">Middle Layer</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>
+                                <input type="checkbox" id="show-attention-values" checked>
+                                Show Attention Values
+                            </label>
+                        </div>
+                    </div>
+                </div>
                 <div id="attention-heatmap"></div>
                 <div class="viz-legend">
                     <p>• Brighter colors indicate stronger attention</p>
                     <p>• Numbers show attention strength above threshold</p>
                     <p>• Hover for exact values</p>
                     <p>• Read from left (source) to right (target)</p>
+                    <p>• Diagonal shows self-attention patterns</p>
                 </div>
             </div>
         </div>
