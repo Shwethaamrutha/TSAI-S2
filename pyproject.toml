@@ -1,0 +1,30 @@
+[project]
+name = "llm_visualizer"
+version = "0.1.0"
+description = "LLM Visualization Tool"
+requires-python = ">=3.8"
+
+dependencies = [
+    "flask>=2.0.0",
+    "transformers>=4.30.0",
+    "torch>=2.0.0",
+    "numpy>=1.24.0",
+    "scikit-learn>=1.2.0",
+    "matplotlib>=3.7.0",
+    "plotly>=5.13.0",
+]
+
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "black>=22.0.0",
+    "flake8>=4.0.0",
+]
+
+
+[tool.uv]
+# You can add uv-specific configurations here if needed

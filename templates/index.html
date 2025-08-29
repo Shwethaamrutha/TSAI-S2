@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Visualizer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="input-section">
+            <h1>LLM Visualizer</h1>
+            <div class="input-container">
+                <textarea id="input-text" placeholder="Enter your text here..."></textarea>
+                <button id="process-btn">Process</button>
+            </div>
+        </div>
+
+        <div class="technical-info-panel">
+            <h2>Technical Information</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>Model Details</h3>
+                    <div id="model-details"></div>
+                </div>
+                <div class="info-card">
+                    <h3>Input Analysis</h3>
+                    <div id="input-details"></div>
+                </div>
+                <div class="info-card">
+                    <h3>Embedding Details</h3>
+                    <div id="embedding-details"></div>
+                </div>
+                <div class="info-card">
+                    <h3>Attention Details</h3>
+                    <div id="attention-details"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="token-section">
+            <h2>Tokenization</h2>
+            <div class="token-list-container">
+                <ul id="token-list"></ul>
+            </div>
+        </div>
+
+        <div class="visualization-section">
+            <div class="viz-container">
+                <h2>3D Embedding Visualization</h2>
+                <div id="embedding-plot"></div>
+                <div class="viz-legend">
+                    <p>• Points represent tokens in 3D space</p>
+                    <p>• Similar words appear closer together</p>
+                    <p>• Colors indicate position in sentence</p>
+                    <p>• Drag to rotate, scroll to zoom</p>
+                </div>
+            </div>
+
+            <div class="viz-container">
+                <h2>Attention Visualization</h2>
+                <div id="attention-heatmap"></div>
+                <div class="viz-legend">
+                    <p>• Brighter colors indicate stronger attention</p>
+                    <p>• Numbers show attention strength above threshold</p>
+                    <p>• Hover for exact values</p>
+                    <p>• Read from left (source) to right (target)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/visualization.js') }}"></script>
+</body>
+</html>
